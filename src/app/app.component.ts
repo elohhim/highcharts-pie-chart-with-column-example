@@ -54,8 +54,12 @@ export class AppComponent implements OnInit {
       title: {
         text: 'Pie chart with column details'
       },
+      subtitle: {
+        text: 'Select data point to display details'
+      },
       plotOptions: {
-        series: {
+        pie: {
+          slicedOffset: 20,
           allowPointSelect: true,
           point: {
             events: {
