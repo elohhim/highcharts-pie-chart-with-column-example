@@ -1,0 +1,5 @@
+<div class="container">
+  <highcharts-chart [Highcharts]="Highcharts" [options]="options$ | async" highcharts-chart></highcharts-chart>
+  <highcharts-chart class="drilldown-chart" [Highcharts]="Highcharts" [options]="drilldownOptions$ | async" [oneToOne]="true"
+    highcharts-chart></highcharts-chart>
+</div>
