@@ -10,7 +10,7 @@ import convert from 'color-convert';
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
   readonly Highcharts: typeof Highcharts = Highcharts;
@@ -19,14 +19,26 @@ export class AppComponent implements OnInit {
     ['Apples', 15],
     ['Oranges', 5],
     ['Kiwis', 10],
-    ['Strawberries', 20]
+    ['Strawberries', 20],
   ];
 
   readonly drilldownData = {
-    Apples: [['Cortland', 5], ['Jonaprince', 3], ['Gala', 2], ['Lobo', 5]],
+    Apples: [
+      ['Cortland', 5],
+      ['Jonaprince', 3],
+      ['Gala', 2],
+      ['Lobo', 5],
+    ],
     Oranges: [['Valencia', 5]],
-    Kiwis: [['Normal', 7], ['Hardy', 3]],
-    Strawberries: [['Senga Sengana', 10], ['Elsanta', 9], ['Honeoye', 1]]
+    Kiwis: [
+      ['Normal', 7],
+      ['Hardy', 3],
+    ],
+    Strawberries: [
+      ['Senga Sengana', 10],
+      ['Elsanta', 9],
+      ['Honeoye', 1],
+    ],
   };
 
   selectedPoint$ = new BehaviorSubject<Highcharts.Point>(null);
@@ -38,10 +50,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.options$ = this.startAngle$.pipe(
-      map(startAngle => this.buildOptions(startAngle))
+      map((startAngle) => this.buildOptions(startAngle))
     );
     this.drilldownOptions$ = this.selectedPoint$.pipe(
-      map(point => this.buildDrilldownOptions(point))
+      map((point) => this.buildDrilldownOptions(point))
     );
   }
 
@@ -49,13 +61,13 @@ export class AppComponent implements OnInit {
     const _this = this;
     return {
       chart: {
-        type: 'pie'
+        type: 'pie',
       },
       title: {
-        text: 'Pie chart with column details'
+        text: 'Pie chart with column details',
       },
       subtitle: {
-        text: 'Select data point to display details'
+        text: 'Select data point to display details',
       },
       plotOptions: {
         pie: {
@@ -68,14 +80,16 @@ export class AppComponent implements OnInit {
                 _this.selectedPoint$.next(this);
               },
               legendItemClick() {
-                const selectedPoint = this.series.points.find(p => p.selected);
+                const selectedPoint = this.series.points.find(
+                  (p) => p.selected
+                );
                 if (selectedPoint) {
                   setTimeout(() => _this.recalculateAngle(selectedPoint));
                 }
-              }
-            }
-          }
-        }
+              },
+            },
+          },
+        },
       },
       series: [
         {
@@ -86,16 +100,32 @@ export class AppComponent implements OnInit {
           startAngle,
           innerSize: '80%',
           dataLabels: {
-            enabled: false
+            enabled: false,
           },
-          showInLegend: true
-        }
+          showInLegend: true,
+        },
       ],
       legend: {
         enabled: true,
         align: 'left',
-        layout: 'vertical'
-      }
+        layout: 'vertical',
+      },
+      responsive: {
+        rules: [
+          {
+            condition: {
+              maxWidth: 500,
+            },
+            chartOptions: {
+              legend: {
+                align: 'center',
+                verticalAlign: 'bottom',
+                layout: 'horizontal',
+              },
+            },
+          },
+        ],
+      },
     };
   }
 
@@ -106,24 +136,24 @@ export class AppComponent implements OnInit {
       : [];
     return {
       chart: {
-        type: 'column'
+        type: 'column',
       },
       title: {
-        text: ''
+        text: '',
       },
       subtitle: {
-        text: point?.name ?? ''
+        text: point?.name ?? '',
       },
       xAxis: {
-        visible: false
+        visible: false,
       },
       yAxis: {
-        visible: false
+        visible: false,
       },
       plotOptions: {
         series: {
-          stacking: 'percent'
-        }
+          stacking: 'percent',
+        },
       },
       series: selectedData
         .sort((a, b) => a[1] - b[1])
@@ -135,24 +165,24 @@ export class AppComponent implements OnInit {
           data: [count],
           dataLabels: {
             enabled: true,
-            format: '{series.name}: {y}'
-          }
+            format: '{series.name}: {y}',
+          },
         })),
       tooltip: {
-        enabled: false
+        enabled: false,
       },
       legend: {
-        enabled: false
-      }
+        enabled: false,
+      },
     };
   }
 
   recalculateAngle(point: Highcharts.Point): void {
     const targetAngle = 90;
     const preceedingAngle = point.series.points
-      .filter(p => p.visible)
-      .filter(p => p.index < point.index) // preceeding points
-      .map(p => p.percentage)
+      .filter((p) => p.visible)
+      .filter((p) => p.index < point.index) // preceeding points
+      .map((p) => p.percentage)
       .map(AppComponent.percentageToDegree)
       .reduce((a, b) => a + b, 0);
     const pointMiddleAngle =
@@ -172,7 +202,7 @@ export class AppComponent implements OnInit {
     return gradstop({
       stops: Math.max(stops, 2),
       inputFormat: 'hex',
-      colorArray: [light, dark]
+      colorArray: [light, dark],
     });
   }
 }
